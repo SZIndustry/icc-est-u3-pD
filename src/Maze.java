@@ -18,6 +18,9 @@ public class Maze {
         }
     }
 
+
+    
+
     public boolean[][] getMaze() {
         return maze;
     }

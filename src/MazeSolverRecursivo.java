@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class MazeSolverRecursivo implements Maze.MazeSolver {
 
@@ -15,34 +12,33 @@ public class MazeSolverRecursivo implements Maze.MazeSolver {
         Set<Cell> visited = new HashSet<>();
 
         if (findPath(grid, start, end, path, visited)) {
+            Collections.reverse(path); // Opcional, para que el camino esté de start a end
             return path;
         }
 
         return null;
     }
 
-    private boolean findPath(boolean[][] grid, Cell start, Cell end, List<Cell> path, Set<Cell> visited) {
-        //Validar si la fila esta dentro del Grid
-        if (start.getRow() < 0 || start.getRow() >= grid.length ||
-            start.getCol() < 0 || start.getCol() >= grid[0].length ||
-            !grid[start.getRow()][start.getCol()] ||
-            visited.contains(start)) {
+    private boolean findPath(boolean[][] grid, Cell current, Cell end, List<Cell> path, Set<Cell> visited) {
+        if (current.getRow() < 0 || current.getRow() >= grid.length ||
+            current.getCol() < 0 || current.getCol() >= grid[0].length ||
+            !grid[current.getRow()][current.getCol()] ||
+            visited.contains(current)) {
             return false;
         }
 
-        visited.add(start); // Marca la celda como visitada
+        visited.add(current);
 
-        if (start.getRow() == end.getRow() && start.getCol() == end.getCol()) {
-            path.add(start);
+        if (current.equals(end)) {
+            path.add(current);
             return true;
         }
 
-        if (findPath(grid, new Cell(start.getRow() + 1, start.getCol()), end, path, visited) || 
-            findPath(grid, new Cell(start.getRow() - 1, start.getCol()), end, path, visited) || 
-            findPath(grid, new Cell(start.getRow(), start.getCol() + 1), end, path, visited) || 
-            findPath(grid, new Cell(start.getRow(), start.getCol() - 1), end, path, visited)) { 
-
-            path.add(start); 
+        if (findPath(grid, new Cell(current.getRow() + 1, current.getCol()), end, path, visited) ||
+            findPath(grid, new Cell(current.getRow() - 1, current.getCol()), end, path, visited) ||
+            findPath(grid, new Cell(current.getRow(), current.getCol() + 1), end, path, visited) ||
+            findPath(grid, new Cell(current.getRow(), current.getCol() - 1), end, path, visited)) {
+            path.add(current);
             return true;
         }
 

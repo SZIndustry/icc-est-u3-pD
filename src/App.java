@@ -1,33 +1,10 @@
-
-import java.util.Arrays;
 import java.util.List;
-
-
+import java.util.Set;
 
 public class App {
-    public static void main(String[] args) throws Exception {
-        //runEjerciciosPD();
+    public static void main(String[] args) {
         runMaze();
-
     }
-
-    private static void runEjerciciosPD() {
-        EjerciciosPD ejerciciosPD = new EjerciciosPD();
-        System.out.println("Fibonnaci recursivo");
-        long start = System.nanoTime();
-        long resultado = ejerciciosPD.getFibonacci(5);
-        long end = System.nanoTime();
-        long duration = (end - start);
-        System.out.println("Resultados: " + resultado + " en timepo " + duration + " nanosegundos");
-
-        System.out.println("Fibonnaci recursivo catching");
-        start = System.nanoTime();
-        resultado = ejerciciosPD.getFibonacciPD(100);
-        end = System.nanoTime();
-        duration = end - start;
-        System.out.println("Resultados fibonnacci de: 100 "  + resultado + " en timepo " + duration + " nanosegundos");
-
-        }
 
     private static void runMaze() {
         boolean[][] predefinedMaze = {
@@ -38,19 +15,64 @@ public class App {
         };
 
         Maze maze = new Maze(predefinedMaze);
-        System.out.println("Laberinto cargado ");
+        System.out.println("Cristopher Salinas");
+        System.out.println("Laberinto cargado:");
         maze.printMaze();
+        System.out.println();
 
         Cell start = new Cell(0, 0);
         Cell end = new Cell(3, 3);
 
-        List<Maze.MazeSolver> solvers = Arrays.asList(
-            new MazeSolverRecursivo()
-        );
-
-        Maze.MazeSolver solver = solvers.get(0);
+        MazeSolverRecursivoCompletBT solver = new MazeSolverRecursivoCompletBT();
         List<Cell> path = solver.getPath(maze.getMaze(), start, end);
-        System.out.println("Camino encontrado:");
-        System.out.println(path);
+        
+        if (path != null) {
+            System.out.println("Camino encontrado:");
+            System.out.println(path);
+            System.out.println();
+
+            // Mostrar laberinto con celdas visitadas
+            System.out.println("Laberinto con las celdas visitadas:");
+            printVisitedMaze(maze.getMaze(), solver.getVisitedCells());
+            System.out.println();
+
+            // Mostrar laberinto con el camino recorrido
+            System.out.println("Laberinto con el camino recorrido:");
+            printPathMaze(maze.getMaze(), path);
+        } else {
+            System.out.println("No se encontró camino.");
+        }
+    }
+
+    private static void printVisitedMaze(boolean[][] maze, Set<Cell> visitedCells) {
+        for (int i = 0; i < maze.length; i++) {
+            for (int j = 0; j < maze[i].length; j++) {
+                Cell current = new Cell(i, j);
+                if (!maze[i][j]) {
+                    System.out.print("* ");
+                } else if (visitedCells.contains(current)) {
+                    System.out.print("> ");
+                } else {
+                    System.out.print("- ");
+                }
+            }
+            System.out.println();
+        }
+    }
+
+    private static void printPathMaze(boolean[][] maze, List<Cell> path) {
+        for (int i = 0; i < maze.length; i++) {
+            for (int j = 0; j < maze[i].length; j++) {
+                Cell current = new Cell(i, j);
+                if (!maze[i][j]) {
+                    System.out.print("* ");
+                } else if (path.contains(current)) {
+                    System.out.print("> ");
+                } else {
+                    System.out.print("- ");
+                }
+            }
+            System.out.println();
+        }
     }
 }
